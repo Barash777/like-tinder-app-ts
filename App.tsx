@@ -1,19 +1,14 @@
-// import { StatusBar } from 'expo-status-bar';
 import {
     StyleSheet,
     Text,
     View,
     TouchableOpacity,
-    Alert, Switch, TextInput,
+    Alert, Switch, TextInput, ScrollView,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {useState} from "react";
 import Users from "./components/Users/Users";
 
-// const {width} = Dimensions.get('screen')
-// const WIDTH = width
-// const PADDING = 20
-// const COLUMNS_NUMBER = 1
 
 // type GenderType = 'male' | 'female' | 'both'
 type SearchParametersType = {
@@ -29,7 +24,6 @@ type SearchParametersType = {
 export default function App() {
     const [isShowUsers, setIsShowUsers] = useState(false);
     const [isShowSettings, setIsShowSettings] = useState(false);
-    // const [text, onChangeText] = useState("Useless Text");
     const [searchParameters, setSearchParameters] = useState<SearchParametersType>({
         gender: 'both',
         minAge: 0,
@@ -39,12 +33,12 @@ export default function App() {
         minWeight: 0,
         maxWeight: 0
     } as SearchParametersType);
-    // const [selectedLanguage, setSelectedLanguage] = useState();
 
     const toggleSwitch = () => setIsShowSettings(prev => !prev);
-    const onChangeMinAge = (value: string) => setSearchParameters(prev => ({...prev, minAge: +value}))
-    const onChangeMaxAge = (value: string) => setSearchParameters(prev => ({...prev, maxAge: +value}))
     const onChangeGender = (value: string | undefined) => setSearchParameters(prev => ({...prev, gender: value}))
+    // const onChangeMinAge = (value: string) => setSearchParameters(prev => ({...prev, minAge: +value}))
+    // const onChangeMaxAge = (value: string) => setSearchParameters(prev => ({...prev, maxAge: +value}))
+    const onChangeProperty = (prop: string, value: string) => setSearchParameters(prev => ({...prev, [prop]: +value}))
 
 
     // button click handler
@@ -67,7 +61,7 @@ export default function App() {
                         />
                         <Text>Show settings for search</Text>
                     </View>
-                    {isShowSettings && <View>
+                    {isShowSettings && <ScrollView style={{marginTop: 50}}>
                         <Text>gender are you looking for</Text>
                         <Picker
                             selectedValue={searchParameters.gender}
@@ -84,7 +78,8 @@ export default function App() {
                         <Text>Min age</Text>
                         <TextInput
                             style={styles.input}
-                            onChangeText={(value) => onChangeMinAge(value)}
+                            // onChangeText={(value) => onChangeMinAge(value)}
+                            onChangeText={(value) => onChangeProperty('minAge', value)}
                             value={searchParameters.minAge.toString()}
                             keyboardType="numeric"
                             placeholder={'Min age'}
@@ -93,16 +88,62 @@ export default function App() {
                         <Text>Max age</Text>
                         <TextInput
                             style={styles.input}
-                            onChangeText={(value) => onChangeMaxAge(value)}
+                            // onChangeText={(value) => onChangeMaxAge(value)}
+                            onChangeText={(value) => onChangeProperty('maxAge', value)}
                             value={searchParameters.maxAge.toString()}
                             keyboardType="numeric"
                             placeholder={'Max age'}
                         />
 
 
+                        <Text>Min weight</Text>
+                        <TextInput
+                            style={styles.input}
+                            // onChangeText={(value) => onChangeMinAge(value)}
+                            onChangeText={(value) => onChangeProperty('minWeight', value)}
+                            value={searchParameters.minWeight.toString()}
+                            keyboardType="numeric"
+                            placeholder={'Min weight'}
+                        />
+
+                        <Text>Max weight</Text>
+                        <TextInput
+                            style={styles.input}
+                            // onChangeText={(value) => onChangeMaxAge(value)}
+                            onChangeText={(value) => onChangeProperty('maxWeight', value)}
+                            value={searchParameters.maxWeight.toString()}
+                            keyboardType="numeric"
+                            placeholder={'Max weight'}
+                        />
+
+
+                        <Text>Min height</Text>
+                        <TextInput
+                            style={styles.input}
+                            // onChangeText={(value) => onChangeMinAge(value)}
+                            onChangeText={(value) => onChangeProperty('minHeight', value)}
+                            value={searchParameters.minHeight.toString()}
+                            keyboardType="numeric"
+                            placeholder={'Min height'}
+                        />
+
+                        <Text>Max height</Text>
+                        <TextInput
+                            style={styles.input}
+                            // onChangeText={(value) => onChangeMaxAge(value)}
+                            onChangeText={(value) => onChangeProperty('maxHeight', value)}
+                            value={searchParameters.maxHeight.toString()}
+                            keyboardType="numeric"
+                            placeholder={'Max height'}
+                        />
+
+
                         <Text>minAge: {searchParameters.minAge}, maxAge: {searchParameters.maxAge}</Text>
+                        <Text>minHeight: {searchParameters.minHeight}, maxHeight: {searchParameters.maxHeight}</Text>
+                        <Text>minWeight {searchParameters.minWeight}, maxWeight: {searchParameters.maxWeight}</Text>
                         <Text>gender: {searchParameters.gender}</Text>
-                    </View>}
+                    </ScrollView>}
+
                     <TouchableOpacity
                         style={styles.button}
                         onPress={onPress}
