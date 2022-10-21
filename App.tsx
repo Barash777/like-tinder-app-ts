@@ -11,18 +11,6 @@ import {
 import {Picker} from '@react-native-picker/picker';
 import {useState} from "react";
 import Users from "./components/Users/Users";
-import Icon from 'react-native-vector-icons/FontAwesome';
-
-
-const myButton = (
-    <Icon
-        name="heart"
-        // backgroundColor="#3b5998"
-        // onPress={this.loginWithFacebook}
-    >
-        Login with Facebook
-    </Icon>
-);
 
 
 // type GenderType = 'male' | 'female' | 'both'
@@ -66,7 +54,6 @@ export default function App() {
             {isShowUsers
                 ? <Users searchParams={searchParameters}/>
                 : <>
-                    {myButton}
                     <View style={styles.inOneRow}>
                         <Switch
                             trackColor={{false: "#767577", true: "#fa785c"}}
@@ -152,12 +139,6 @@ export default function App() {
                             keyboardType="numeric"
                             placeholder={'Max height'}
                         />
-
-
-                        <Text>minAge: {searchParameters.minAge}, maxAge: {searchParameters.maxAge}</Text>
-                        <Text>minHeight: {searchParameters.minHeight}, maxHeight: {searchParameters.maxHeight}</Text>
-                        <Text>minWeight {searchParameters.minWeight}, maxWeight: {searchParameters.maxWeight}</Text>
-                        <Text>gender: {searchParameters.gender}</Text>
                     </ScrollView>}
 
                     <TouchableOpacity
@@ -212,5 +193,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         // alignItems: 'flex-end'
+    },
+
+    iconButton: {
+        backgroundColor: "#fa785c",
+        width: 80,
+        height: 80
     }
 });

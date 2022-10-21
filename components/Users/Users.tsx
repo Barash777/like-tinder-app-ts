@@ -1,10 +1,11 @@
-import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
+import {ActivityIndicator, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {useEffect, useState} from "react";
 import {userAPI, UserType} from "../../api/api";
 import {SearchParametersType} from "../../App";
 // import JustList from "./JustList";
 import User from "./User/User";
 import {HEIGHT, PADDING, WIDTH} from "../../common/screen";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 
 type InitType = 'loading' | 'success' | 'failed'
@@ -18,6 +19,19 @@ export default function Users({searchParams}: UsersPropsType) {
     const [users, setUsers] = useState<UserType[]>([]);
     const [userNumber, setUserNumber] = useState(0);
 
+    const onPressHandler = () => {
+        setUserNumber(prev => prev + 1)
+    }
+
+    // buttons
+    const iconButton = (iconName: string, color: string) => {
+        return (
+            <TouchableOpacity activeOpacity={0.4} onPress={onPressHandler}>
+                <Icon name={iconName} size={30} color={color}/>
+            </TouchableOpacity>
+        );
+    }
+
     useEffect(() => {
         userAPI
             .getUsers()
@@ -25,7 +39,7 @@ export default function Users({searchParams}: UsersPropsType) {
                 setUsers(filterUsers(users, searchParams))
                 setInit('success')
             })
-            .catch(e => {
+            .catch(() => {
                 setInit('failed')
             })
     }, []);
@@ -47,12 +61,24 @@ export default function Users({searchParams}: UsersPropsType) {
     // check users length
     if (users.length) {
         // console.log(users)
+
+        // check userNumber
+        if (userNumber >= users.length) {
+            return <View style={styles.container}>
+                <Text>You've already seen all user</Text>
+            </View>
+        }
+
+        // show 1 user
         return <View style={styles.container}>
-            <Text>Wow wow wow</Text>
+            <Text>Look carefully! Maybe it's your destiny</Text>
             <View style={styles.userCard}>
                 <User user={users[userNumber]}/>
             </View>
-            <Text>End</Text>
+            <View style={styles.inOneRow}>
+                <View style={{marginHorizontal: 20}}>{iconButton('ban', 'blue')}</View>
+                <View style={{marginHorizontal: 20}}>{iconButton('heart', 'red')}</View>
+            </View>
         </View>
 
         // return <JustList users={users}/>
@@ -100,5 +126,14 @@ const styles = StyleSheet.create({
         // shadowColor: 'black',
         // shadowOpacity: 0.7,
         // shadowOffset: {width: 5, height: -5},
+    },
+
+    inOneRow: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginHorizontal: 40
+        // justifyContent: 'space-between',
+        // alignItems: 'flex-end'
     },
 });
