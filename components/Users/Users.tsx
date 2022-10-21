@@ -9,7 +9,8 @@ import {
     View
 } from "react-native";
 import {useEffect, useState} from "react";
-import {userAPI} from "../../api/api";
+import {userAPI, UserType} from "../../api/api";
+import User from "./User/User";
 
 const {width, height} = Dimensions.get('screen')
 const WIDTH = width
@@ -17,113 +18,15 @@ const HEIGHT = height
 const PADDING = 20
 const COLUMNS_NUMBER = 1
 
-export type User = {
-    id: number;
-    firstName: string;
-    lastName: string;
-    maidenName: string;
-    age: number;
-    gender: string;
-    email: string;
-    phone: string;
-    username: string;
-    password: string;
-    birthDate: string;
-    image: string;
-    bloodGroup: string;
-    height: number;
-    weight: number;
-    eyeColor: string;
-    hair: UserHair;
-    domain: string;
-    ip: string;
-    address: UserAddress;
-    macAddress: string;
-    university: string;
-    bank: UserBank;
-    company: UserCompany;
-    ein: string;
-    ssn: string;
-    userAgent: string;
-}
-export type UserHair = {
-    color: string;
-    type: string;
-}
-export type UserAddressCoordinates = {
-    lat: number;
-    lng: number;
-}
-export type UserAddress = {
-    address: string;
-    city: string;
-    coordinates: UserAddressCoordinates;
-    postalCode: string;
-    state: string;
-}
-export type UserBank = {
-    cardExpire: string;
-    cardNumber: string;
-    cardType: string;
-    currency: string;
-    iban: string;
-}
-export type UserCompanyAddressCoordinates = {
-    lat: number;
-    lng: number;
-}
-export type UserCompanyAddress = {
-    address: string;
-    city: string;
-    coordinates: UserCompanyAddressCoordinates;
-    postalCode: string;
-    state: string;
-}
-export type UserCompany = {
-    address: UserCompanyAddress;
-    department: string;
-    name: string;
-    title: string;
-}
-
 type InitType = 'loading' | 'success' | 'failed'
 
-type GirlsType = {
-    description: string
-    "image-url": string
-}
-const girls: GirlsType[] = [{
-    "description": "Lady with a Teddy",
-    "image-url": "https://images.pexels.com/photos/3348748/pexels-photo-3348748.jpeg"
-},
-    {
-        "description": "Girl with camera",
-        "image-url": "https://images.pexels.com/photos/3812944/pexels-photo-3812944.jpeg"
-    },
-    {
-        "description": "Beautiful Girl with Glasses",
-        "image-url": "https://images.pexels.com/photos/2100063/pexels-photo-2100063.jpeg"
-    },
-    {
-        "description": "Redhead with frackles",
-        "image-url": "https://images.pexels.com/photos/3228213/pexels-photo-3228213.jpeg"
-    },
-    {
-        "description": "Girl in black dress",
-        "image-url": "https://images.pexels.com/photos/1385472/pexels-photo-1385472.jpeg"
-    },
-    {
-        "description": "Girl Sitting on Chair",
-        "image-url": "https://images.pexels.com/photos/4725133/pexels-photo-4725133.jpeg"
-    }
-]
 
 export default function Users() {
     const [init, setInit] = useState<InitType>('loading');
-    const [users, setUsers] = useState<User[]>([]);
+    const [users, setUsers] = useState<UserType[]>([]);
+    const [userNumber, setUserNumber] = useState(0);
 
     useEffect(() => {
-        // setTimeout(() => {
         userAPI
             .getUsers()
             .then(users => {
@@ -132,7 +35,6 @@ export default function Users() {
                 setInit('success')
             })
             .catch(e => setInit('failed'))
-        // }, 3000)
     }, []);
 
     // check for INIT loading
@@ -149,39 +51,39 @@ export default function Users() {
         </View>
     }
 
-    const render: ListRenderItem<User> = ({item}) => {
+    // const usersJSX = users.map(u => <User key={u.id} user={u}/>)
+    // return usersJSX
+    if (users) {
+        return <User user={users[0]}/>
+    }
+
+    return <View>
+        <Text>There are not suitable user</Text>
+    </View>
+}
+
+
+type JustListPropsType = {
+    users: UserType[]
+}
+const JustList = ({users}: JustListPropsType) => {
+    const render: ListRenderItem<UserType> = ({item}) => {
         return <View key={item.id} style={styles.item}>
             <ImageBackground
                 source={{uri: item.image}}
                 resizeMode="cover"
                 style={styles.image}
-                // onProgress={() => <ActivityIndicator size="large"/>}
-                // onPartialLoad={() => <ActivityIndicator size="large"/>}
+                // onProgress={() => <ActivityIndicator />}
                 borderRadius={10}
             >
-                <Text style={styles.text}>{item.firstName} {item.lastName}, {item.age}</Text>
+                <Text style={styles.text}>{item.firstName} {item.lastName}</Text>
+                <Text style={styles.text}>{item.gender}, {item.age}</Text>
             </ImageBackground>
 
         </View>
     }
 
-    const renderGirls: ListRenderItem<GirlsType> = ({item}) => {
-        return <View key={item.description} style={styles.item}>
-            <ImageBackground
-                source={{uri: item["image-url"]}}
-                resizeMode="cover"
-                style={styles.image}
-                borderRadius={10}
-                // onProgress={() => <ActivityIndicator size="large"/>}
-                // onPartialLoad={() => <ActivityIndicator size="large"/>}
-            >
-                <Text style={styles.text}>{item.description}</Text>
-            </ImageBackground>
-
-        </View>
-    }
-
-
+    // show just list
     return (
         <FlatList
             numColumns={COLUMNS_NUMBER}
@@ -206,13 +108,11 @@ const styles = StyleSheet.create({
     },
     item: {
         flex: 1,
-        // backgroundColor: 'pink',
         width: (WIDTH - PADDING * 2) / COLUMNS_NUMBER,
         height: (HEIGHT * 0.75),
         marginVertical: 10,
         borderWidth: 1,
         borderRadius: 10,
-        // padding: 10,
         // shadowColor: 'black',
         // shadowOpacity: 0.7,
         // shadowOffset: {width: 5, height: -5},
@@ -220,8 +120,6 @@ const styles = StyleSheet.create({
     image: {
         flex: 1,
         justifyContent: "flex-end",
-        // background: transparent,
-        // background: (to bottom, rgba(255,255,255,1) 30%,rgba(0,0,0,0) 100%);
     },
     text: {
         color: "white",
@@ -233,8 +131,5 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         marginHorizontal: 10,
         borderRadius: 10
-        // borderBottomLeftRadius: 20,
-        // borderBottomRightRadius: 20,
-        // borderTopEndRadius: 20,
     }
 });
