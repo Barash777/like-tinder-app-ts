@@ -1,6 +1,5 @@
 import {ImageBackground, StyleSheet, Text} from "react-native";
 import {UserType} from "../../../api/api";
-// import adaptiveIcon from "../../../assets/adaptive-icon.png"
 
 
 type UserPropsType = {
@@ -29,17 +28,6 @@ export default function User({user}: UserPropsType) {
 }
 
 const styles = StyleSheet.create({
-    /*userCard: {
-        flex: 1,
-        width: (WIDTH - PADDING * 2),
-        height: (HEIGHT * 0.3),
-        marginVertical: 10,
-        borderWidth: 1,
-        borderRadius: 10,
-        // shadowColor: 'black',
-        // shadowOpacity: 0.7,
-        // shadowOffset: {width: 5, height: -5},
-    },*/
     image: {
         flex: 1,
         justifyContent: "flex-end",

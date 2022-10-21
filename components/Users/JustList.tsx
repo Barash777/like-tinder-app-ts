@@ -1,6 +1,6 @@
 import {FlatList, ImageBackground, ListRenderItem, StyleSheet, Text, View} from "react-native";
 import {UserType} from "../../api/api";
-import {HEIGHT, PADDING, WIDTH} from "../../App";
+import {HEIGHT, PADDING, WIDTH} from "../../common/screen";
 
 const COLUMNS_NUMBER = 1
 

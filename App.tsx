@@ -1,18 +1,28 @@
 import {
+    Alert,
+    ScrollView,
     StyleSheet,
+    Switch,
     Text,
-    View,
+    TextInput,
     TouchableOpacity,
-    Alert, Switch, TextInput, ScrollView, Dimensions,
+    View,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {useState} from "react";
 import Users from "./components/Users/Users";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-const {width, height} = Dimensions.get('screen')
-export const WIDTH = width
-export const HEIGHT = height
-export const PADDING = 20
+
+const myButton = (
+    <Icon
+        name="heart"
+        // backgroundColor="#3b5998"
+        // onPress={this.loginWithFacebook}
+    >
+        Login with Facebook
+    </Icon>
+);
 
 
 // type GenderType = 'male' | 'female' | 'both'
@@ -56,6 +66,7 @@ export default function App() {
             {isShowUsers
                 ? <Users searchParams={searchParameters}/>
                 : <>
+                    {myButton}
                     <View style={styles.inOneRow}>
                         <Switch
                             trackColor={{false: "#767577", true: "#fa785c"}}

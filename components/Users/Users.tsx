@@ -1,9 +1,11 @@
 import {ActivityIndicator, StyleSheet, Text, View} from "react-native";
 import {useEffect, useState} from "react";
 import {userAPI, UserType} from "../../api/api";
-import {HEIGHT, PADDING, SearchParametersType, WIDTH} from "../../App";
+import {SearchParametersType} from "../../App";
 // import JustList from "./JustList";
 import User from "./User/User";
+import {HEIGHT, PADDING, WIDTH} from "../../common/screen";
+
 
 type InitType = 'loading' | 'success' | 'failed'
 
@@ -42,8 +44,7 @@ export default function Users({searchParams}: UsersPropsType) {
         </View>
     }
 
-    // const usersJSX = users.map(u => <User key={u.id} user={u}/>)
-    // return usersJSX
+    // check users length
     if (users.length) {
         // console.log(users)
         return <View style={styles.container}>
