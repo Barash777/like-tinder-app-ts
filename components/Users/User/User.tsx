@@ -1,11 +1,7 @@
-import {Dimensions, ImageBackground, StyleSheet, Text, View} from "react-native";
+import {ImageBackground, StyleSheet, Text} from "react-native";
 import {UserType} from "../../../api/api";
 // import adaptiveIcon from "../../../assets/adaptive-icon.png"
 
-const {width, height} = Dimensions.get('screen')
-const WIDTH = width
-const HEIGHT = height
-const PADDING = 20
 
 type UserPropsType = {
     user: UserType

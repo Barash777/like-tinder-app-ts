@@ -3,11 +3,16 @@ import {
     Text,
     View,
     TouchableOpacity,
-    Alert, Switch, TextInput, ScrollView,
+    Alert, Switch, TextInput, ScrollView, Dimensions,
 } from 'react-native';
 import {Picker} from '@react-native-picker/picker';
 import {useState} from "react";
 import Users from "./components/Users/Users";
+
+const {width, height} = Dimensions.get('screen')
+export const WIDTH = width
+export const HEIGHT = height
+export const PADDING = 20
 
 
 // type GenderType = 'male' | 'female' | 'both'
