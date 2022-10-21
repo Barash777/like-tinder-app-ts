@@ -1,6 +1,6 @@
 export const userAPI = {
     getUsers() {
-        return fetch('https://dummyjson.com/users?limit=100')
+        return fetch('https://dummyjson.com/users')
             .then(res => res.json())
             .then(json => json.users)
     }

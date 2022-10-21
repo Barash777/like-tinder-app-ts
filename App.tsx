@@ -11,7 +11,7 @@ import Users from "./components/Users/Users";
 
 
 // type GenderType = 'male' | 'female' | 'both'
-type SearchParametersType = {
+export type SearchParametersType = {
     gender: string | undefined
     minAge: number
     maxAge: number
@@ -49,7 +49,7 @@ export default function App() {
     return (
         <View style={styles.container}>
             {isShowUsers
-                ? <Users/>
+                ? <Users searchParams={searchParameters}/>
                 : <>
                     <View style={styles.inOneRow}>
                         <Switch
@@ -59,7 +59,7 @@ export default function App() {
                             onValueChange={toggleSwitch}
                             value={isShowSettings}
                         />
-                        <Text>Show settings for search</Text>
+                        {!isShowSettings && <Text>Show settings for search</Text>}
                     </View>
                     {isShowSettings && <ScrollView style={{marginTop: 50}}>
                         <Text>gender are you looking for</Text>

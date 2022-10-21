@@ -11,6 +11,7 @@ import {
 import {useEffect, useState} from "react";
 import {userAPI, UserType} from "../../api/api";
 import User from "./User/User";
+import {SearchParametersType} from "../../App";
 
 const {width, height} = Dimensions.get('screen')
 const WIDTH = width
@@ -20,8 +21,11 @@ const COLUMNS_NUMBER = 1
 
 type InitType = 'loading' | 'success' | 'failed'
 
+type UsersPropsType = {
+    searchParams: SearchParametersType
+}
 
-export default function Users() {
+export default function Users({searchParams}: UsersPropsType) {
     const [init, setInit] = useState<InitType>('loading');
     const [users, setUsers] = useState<UserType[]>([]);
     const [userNumber, setUserNumber] = useState(0);
@@ -30,11 +34,12 @@ export default function Users() {
         userAPI
             .getUsers()
             .then(users => {
-                setUsers(users)
-                // setUsers(girls)
+                setUsers(filterUsers(users, searchParams))
                 setInit('success')
             })
-            .catch(e => setInit('failed'))
+            .catch(e => {
+                setInit('failed')
+            })
     }, []);
 
     // check for INIT loading
@@ -53,11 +58,18 @@ export default function Users() {
 
     // const usersJSX = users.map(u => <User key={u.id} user={u}/>)
     // return usersJSX
-    if (users) {
-        return <User user={users[0]}/>
+    if (users.length) {
+        // console.log(users)
+        return <View style={styles.container}>
+            <Text>Wow wow wow</Text>
+            <View style={styles.userCard}>
+                <User user={users[userNumber]}/>
+            </View>
+            <Text>End</Text>
+        </View>
     }
 
-    return <View>
+    return <View style={styles.container}>
         <Text>There are not suitable user</Text>
     </View>
 }
@@ -97,6 +109,25 @@ const JustList = ({users}: JustListPropsType) => {
     )
 }
 
+// Filter users by serach params
+const filterUsers = (users: UserType[], searchParams: SearchParametersType) => {
+    // console.log('searchParams.gender = ', searchParams.gender)
+    // return users.filter(u => u.gender === searchParams.gender)
+
+    return users.filter(u => {
+        return ((u.gender === searchParams.gender || searchParams.gender === 'both') &&
+            (searchParams.minAge === 0 || u.age >= searchParams.minAge) &&
+            (searchParams.maxAge === 0 || u.age <= searchParams.maxAge) &&
+
+            (searchParams.minWeight === 0 || u.weight >= searchParams.minWeight) &&
+            (searchParams.maxWeight === 0 || u.weight <= searchParams.maxWeight) &&
+
+            (searchParams.minHeight === 0 || u.height >= searchParams.minHeight) &&
+            (searchParams.maxHeight === 0 || u.height <= searchParams.maxHeight))
+    })
+}
+
+// styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -106,6 +137,19 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingHorizontal: 20
     },
+
+    userCard: {
+        // flex: 1,
+        width: (WIDTH - PADDING * 2),
+        height: (HEIGHT * 0.75),
+        marginVertical: 10,
+        borderWidth: 1,
+        borderRadius: 10,
+        // shadowColor: 'black',
+        // shadowOpacity: 0.7,
+        // shadowOffset: {width: 5, height: -5},
+    },
+
     item: {
         flex: 1,
         width: (WIDTH - PADDING * 2) / COLUMNS_NUMBER,
